@@ -5,14 +5,14 @@
 
 ## Assignment Requirements
 
-### 1. Cloud Platform (PaaS)
-* ศึกษาและใช้งาน Cloud Platform เพื่อ Deploy Web App และ Database ([Railway](https://railway.com/))
+### 1. Cloud Platform 
+* ใช้งาน Cloud Platform เพื่อ Deploy Web App และ Database ([Railway](https://railway.com/))
 
 ### 2. Database Setup
-* ใช้ Database **Northwind** จากไฟล์ `dbNorthwind.sql` ที่ใช้ในการเรียน
+* ใช้ Database **Northwind** จากไฟล์ `dbNorthwind.sql` 
 
 ### 3. Architecture
-* ออกแบบ Web App โดยใช้หลักการ **CRUD ผ่าน API** ตามรูปแบบที่เรียน
+* ออกแบบ Web App โดยใช้หลักการ **CRUD ผ่าน API** 
 
 ### 4. Web Application Features
 ระบบต้องมีฟังก์ชันการทำงานดังนี้:
@@ -45,3 +45,53 @@
 1. **Live URL** หลังจาก Deploy ผ่าน Railway
 2. **Document Link** (Google Docs) อธิบายขั้นตอนการทำงานและขั้นตอนการ Deploy โดยละเอียด
 3. **Source Code** ทั้งหมด
+
+---
+
+## Project Structure
+
+```
+Web App/
+│
+├── index.html                         # หน้าเว็บหลัก (ตาราง + ฟอร์ม + Modal)
+│
+├── css/
+│   └── style.css                      # Custom CSS เสริม Bootstrap 5
+│
+├── js/
+│   ├── app.js                         # Logic หลัก (โหลดตาราง, ค้นหา, ลบ, แก้ไข)
+│   ├── form.js                        # ฟอร์ม + Validation + Submit + Alert
+│   └── loaddata.js                    # โหลด Dropdown (Categories, Suppliers)
+│
+├── inc/
+│   └── connDB.php                     # เชื่อมต่อ MySQL ด้วย PDO (รองรับ ENV)
+│
+└── api/
+    ├── .htaccess                      # URL Rewrite → index.php
+    ├── index.php                      # Entry Point + ลงทะเบียน Routes
+    │
+    ├── core/
+    │   ├── Router.php                 # จัดการ Routing (GET/POST/PUT/DELETE)
+    │   └── Response.php               # จัดรูปแบบ JSON Response
+    │
+    └── controllers/
+        ├── ProductController.php      # CRUD สินค้า (ตัวหลัก)
+        ├── CategoryController.php     # ดึงข้อมูลหมวดหมู่ (Read-only)
+        └── SupplierController.php     # ดึงข้อมูลผู้จำหน่าย (Read-only)
+```
+
+---
+
+## API Endpoints
+
+| Method | Path | หน้าที่ |
+|:---|:---|:---|
+| `GET` | `/api/products` | ดึงรายการสินค้าทั้งหมด (+ `?search=keyword`) |
+| `GET` | `/api/products/{id}` | ดึงข้อมูลสินค้ารายตัว |
+| `POST` | `/api/products` | เพิ่มสินค้าใหม่ |
+| `PUT` | `/api/products/{id}` | แก้ไขข้อมูลสินค้า |
+| `DELETE` | `/api/products/{id}` | ลบสินค้า |
+| `GET` | `/api/categories` | ดึงหมวดหมู่สินค้าทั้งหมด (สำหรับ Dropdown) |
+| `GET` | `/api/categories/{id}` | ดึงหมวดหมู่สินค้ารายตัว |
+| `GET` | `/api/suppliers` | ดึงผู้จัดจำหน่ายทั้งหมด (สำหรับ Dropdown) |
+| `GET` | `/api/suppliers/{id}` | ดึงผู้จัดจำหน่ายรายตัว |
