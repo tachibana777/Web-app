@@ -9,8 +9,6 @@ CREATE TABLE `tb_categories` (
 
 INSERT INTO `tb_categories` VALUES (1,'Beverages','Soft drinks, coffees, teas, be'),(2,'Condiments','Sweet and savory sauces, relis'),(3,'Confections','Desserts, candies, and sweet b'),(4,'Dairy Products','Cheeses'),(5,'Grains/Cereals','Breads, crackers, pasta, and c'),(6,'Meat/Poultry','Prepared meats'),(7,'Produce','Dried fruit and bean curd'),(8,'Seafood','Seaweed and fish'),(9,'Sports','about sport products ');
 
-UN
-
 DROP TABLE IF EXISTS `tb_customers`;
 
 CREATE TABLE `tb_customers` (
