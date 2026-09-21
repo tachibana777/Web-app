@@ -35,20 +35,9 @@
 
 ## Tech Stack
 
-* **Frontend:**
-  * HTML5
-  * CSS3 (Custom Styles)
-  * JavaScript (ES6+ / Fetch API)
-  * Bootstrap 5 & Bootstrap Icons
-  * Google Fonts (IBM Plex Sans Thai)
-* **Backend:**
-  * PHP (RESTful API, PDO, MVC/Controller Structure)
-* **Database:**
-  * MySQL (Northwind Database Schema)
-* **Deployment & Tools:**
-  * Cloud Platform: Railway (PaaS)
-  * Local Server: MAMP (Apache + MySQL)
-  * Version Control: Git & GitHub
+* **Frontend:** HTML, CSS, JavaScript, Bootstrap 5
+* **Backend:** PHP
+* **Database:** MySQL
 
 ---
 
