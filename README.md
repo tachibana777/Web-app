@@ -51,48 +51,50 @@
 
 ## Project Structure
 
+ระบบนี้พัฒนาด้วย **PHP** และ **MySQL** โดยแบ่งออกเป็น 2 ส่วนหลักคือ Frontend และ Backend API
+
 ```
 Web App/
 │
-├── index.html                         # หน้าเว็บหลัก (ตาราง + ฟอร์ม + Modal)
+├── index.html                         # หน้าเว็บหลัก (แสดงตารางสินค้า, ฟอร์มบันทึกข้อมูล และ Modal แจ้งเตือน)
 │
 ├── css/
-│   └── style.css                      # Custom CSS เสริม Bootstrap 5
+│   └── style.css                      # สไตล์ตกแต่งหน้าเว็บ (Custom CSS ร่วมกับ Bootstrap 5)
 │
 ├── js/
-│   ├── app.js                         # Logic หลัก (โหลดตาราง, ค้นหา, ลบ, แก้ไข)
-│   ├── form.js                        # ฟอร์ม + Validation + Submit + Alert
-│   └── loaddata.js                    # โหลด Dropdown (Categories, Suppliers)
+│   ├── app.js                         # ควบคุมการทำงานหลัก (ดึงตารางสินค้า, ระบบค้นหา, ปุ่มแก้ไข และปุ่มลบ)
+│   ├── form.js                        # จัดการฟอร์มสินค้า (ตรวจสอบความถูกต้อง Validation, ส่งข้อมูล และแจ้งเตือน Alert)
+│   └── loaddata.js                    # ฟังก์ชันโหลดตัวเลือก Dropdown (หมวดหมู่ และ ผู้จัดจำหน่าย) จาก API
 │
 ├── inc/
-│   └── connDB.php                     # เชื่อมต่อ MySQL ด้วย PDO (รองรับ ENV)
+│   └── connDB.php                     # ฟังก์ชันเชื่อมต่อฐานข้อมูล MySQL ด้วย PDO (รองรับทั้ง Local และ Cloud)
 │
 └── api/
-    ├── .htaccess                      # URL Rewrite → index.php
-    ├── index.php                      # Entry Point + ลงทะเบียน Routes
+    ├── .htaccess                      # กำหนด Rewrite URL เพื่อส่งทุกคำขอมาประมวลผลที่ index.php
+    ├── index.php                      # จุดรับคำขอหลักของ API (Entry Point) และลงทะเบียน Route ทั้งหมด
     │
     ├── core/
-    │   ├── Router.php                 # จัดการ Routing (GET/POST/PUT/DELETE)
-    │   └── Response.php               # จัดรูปแบบ JSON Response
+    │   ├── Router.php                 # ตัวจัดการเส้นทาง API (ตรวจสอบ Method และ Path เช่น /products/{id})
+    │   └── Response.php               # คลาสจัดรูปแบบข้อมูลตอบกลับเป็น JSON มาตรฐานเดียวกันทั้งระบบ
     │
     └── controllers/
-        ├── ProductController.php      # CRUD สินค้า (ตัวหลัก)
-        ├── CategoryController.php     # ดึงข้อมูลหมวดหมู่ (Read-only)
-        └── SupplierController.php     # ดึงข้อมูลผู้จำหน่าย (Read-only)
+        ├── ProductController.php      # จัดการข้อมูลสินค้า CRUD (ค้นหา, เพิ่ม, ดึงข้อมูล, แก้ไข และลบ)
+        ├── CategoryController.php     # ดึงข้อมูลหมวดหมู่สินค้าสำหรับ Dropdown (Read-only)
+        └── SupplierController.php     # ดึงข้อมูลผู้จัดจำหน่ายสินค้าสำหรับ Dropdown (Read-only)
 ```
 
 ---
 
 ## API Endpoints
 
-| Method | Path | หน้าที่ |
-|:---|:---|:---|
-| `GET` | `/api/products` | ดึงรายการสินค้าทั้งหมด (+ `?search=keyword`) |
-| `GET` | `/api/products/{id}` | ดึงข้อมูลสินค้ารายตัว |
-| `POST` | `/api/products` | เพิ่มสินค้าใหม่ |
-| `PUT` | `/api/products/{id}` | แก้ไขข้อมูลสินค้า |
-| `DELETE` | `/api/products/{id}` | ลบสินค้า |
-| `GET` | `/api/categories` | ดึงหมวดหมู่สินค้าทั้งหมด (สำหรับ Dropdown) |
-| `GET` | `/api/categories/{id}` | ดึงหมวดหมู่สินค้ารายตัว |
-| `GET` | `/api/suppliers` | ดึงผู้จัดจำหน่ายทั้งหมด (สำหรับ Dropdown) |
-| `GET` | `/api/suppliers/{id}` | ดึงผู้จัดจำหน่ายรายตัว |
+การติดต่อสื่อสารระหว่างหน้าเว็บกับฐานข้อมูลจะกระทำผ่าน RESTful API โดยส่งและรับข้อมูลในรูปแบบ **JSON** ผ่าน Endpoint ดังต่อไปนี้:
+
+| Method | Endpoint Path | หน้าที่การทำงาน | ข้อมูลที่ส่งกลับ |
+|:---|:---|:---|:---|
+| `GET` | `/api/products` | ดึงรายการสินค้าทั้งหมด (รองรับ Parameter `?search=คำค้น`) | รายการสินค้าแบบ JSON Array |
+| `GET` | `/api/products/{id}` | ดึงข้อมูลสินค้าเฉพาะรายการตามรหัส ID | ข้อมูลสินค้าแบบ JSON Object |
+| `POST` | `/api/products` | เพิ่มข้อมูลสินค้าใหม่เข้าระบบ | สถานะการทำงาน และ ID ของสินค้าใหม่ |
+| `PUT` | `/api/products/{id}` | บันทึกการแก้ไขข้อมูลสินค้าตามรหัส ID | สถานะการอัปเดตข้อมูล |
+| `DELETE` | `/api/products/{id}` | ลบข้อมูลสินค้าออกจากระบบตามรหัส ID | สถานะการลบข้อมูล |
+| `GET` | `/api/categories` | ดึงรายชื่อหมวดหมู่สินค้าทั้งหมดสำหรับ Dropdown | รายชื่อหมวดหมู่แบบ JSON Array |
+| `GET` | `/api/suppliers` | ดึงรายชื่อผู้จัดจำหน่ายทั้งหมดสำหรับ Dropdown | รายชื่อผู้จัดจำหน่ายแบบ JSON Array |
